@@ -261,6 +261,11 @@ def reset_weekly_stats():
         except Exception as e:
             print(f"❌ Ошибка сброса: {e}")
 
+def reset_weekly_stats_thread():
+    """Запускает поток для еженедельного сброса статистики"""
+    thread = threading.Thread(target=reset_weekly_stats, daemon=True)
+    thread.start()
+
 # ==================== ДЕКОРАТОРЫ ====================
 
 def check_banned(func):
@@ -951,7 +956,7 @@ def handle_callbacks(call):
         bot.answer_callback_query(call.id)
         return
     
-    # ===== АДМИНСКИЕ КОЛЛБЭКИ (ВСЕ ИСПРАВЛЕНЫ) =====
+    # ===== АДМИНСКИЕ КОЛЛБЭКИ =====
     if data.startswith("close_app_"):
         handle_close_app(call)
         return
@@ -1113,7 +1118,7 @@ def process_seo(message):
         user_data[user_id]['contact'] = text
         finish_service(user_id)
 
-# ==================== АДМИНСКИЕ ФУНКЦИИ (ИСПРАВЛЕНЫ) ====================
+# ==================== АДМИНСКИЕ ФУНКЦИИ ====================
 
 def handle_admin_ban(call):
     msg = bot.send_message(call.message.chat.id, "🔨 Введите ID пользователя:")
